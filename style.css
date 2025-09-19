@@ -4,16 +4,57 @@ p {
 
 #statBox {
     display: flex;
-    margin: 0px;
-    margin-top: 100px;
+    margin:0px;
     background-color: blue;
+    width: 200px;
+    height: 200px;
+    
+
 }
 
 #userInput {
     display: flex;
+
 }
 
 #pokemonInfoDisplay {
     background-color: red;
+    color: black;
+    width: 200px;
+    height: 200px;
 }
 
+#pokemonSprite {
+    height: 200px;
+    background-color: lightblue;
+    display: none;
+    width: 200px;
+    height: 200px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    
+}
+
+
+.pokemonImage {
+    height: 200px;
+    background-color: lightblue;
+    background-image: url(./images/pokeball.jpg);
+    display: block;
+    width: 200px;
+    height: 200px;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+}
+
+#pokeball {
+    background-image: url(./images/pokeball.jpg);
+    display: block;
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    width: 200px;
+    height: 200px;
+}

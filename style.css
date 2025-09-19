@@ -1,0 +1,19 @@
+p {
+    color: black
+}
+
+#statBox {
+    display: flex;
+    margin: 0px;
+    margin-top: 100px;
+    background-color: blue;
+}
+
+#userInput {
+    display: flex;
+}
+
+#pokemonInfoDisplay {
+    background-color: red;
+}
+

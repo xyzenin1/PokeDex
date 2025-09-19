@@ -66,8 +66,109 @@ async function getPokemon() {
             const typeNames = data.types.map(typeInfo => {
                 const typeName = typeInfo.type.name;
                 return typeName.charAt(0).toUpperCase() + typeName.slice(1);
-            }).join(', ');
-            type.textContent = `Type: ${typeNames}`;
+            });
+            type.textContent = `Type: ${typeNames.join(', ')}`;
+
+            // for weaknesses, resistances, and immunities
+
+            await getTypeEffectiveness(data.types);
+
+    }
+    catch(error) {
+        console.error(error);
+    }
+}
+
+async function getTypeEffectiveness(pokemonTypes) {
+
+    const weaknessesElement = document.getElementById("weaknesses");
+    const resistancesElement = document.getElementById("resistances");
+    const immunitiesElement = document.getElementById("immunities");
+
+    try {
+        // all weaknesses, resistances, immunities
+        let allWeaknesses = new Set();
+        let allResistances = new Set();
+        let allImmunities = new Set();
+
+        // for specific type effectiveness
+        let typeEffectiveness = {};
+
+        const allTypes = ["normal", "fire", "water", "electric", "grass", "ice", "fighting", 
+                         "poison", "ground", "flying", "psychic", "bug", "rock", "ghost", 
+                         "dragon", "dark", "steel", "fairy"];
+        
+        // start each type effectiveness at 1
+        allTypes.forEach(type => {
+            typeEffectiveness[type] = 1;
+        }
+        );
+
+        for (let i = 0; i < pokemonTypes.length; i++) {
+            const typeInfo = pokemonTypes[i];
+            console.log(`Fetching data type: ${typeInfo.type.name}`);
+            const typeResponse = await fetch(typeInfo.type.url);
+            const typeData = await typeResponse.json();
+
+            const weakTo = typeData.damage_relations.double_damage_from;
+            weakTo.forEach(weakness => {
+                allWeaknesses.add(weakness.name);
+                typeEffectiveness[weakness.name] *= 2;
+            });
+
+            const resistantTo = typeData.damage_relations.half_damage_from;
+            resistantTo.forEach(resistance => {
+                allResistances.add(resistance.name);
+            });
+
+            const immuneTo = typeData.damage_relations.no_damage_from;
+            immuneTo.forEach(immune => {
+                allImmunities.add(immune.name);
+            });
+        }
+
+        // if (allWeaknesses.size > 0) {
+        //     const weaknessArray = Array.from(allWeaknesses).map(weakness =>
+        //         weakness.charAt(0).toUpperCase() + weakness.slice(1)
+        //     );
+        //     weaknessesElement.textContent = `Weaknesses: ${weaknessArray.join(', ')}`;
+        // }
+        // else {
+        //     weaknessesElement.textContent = `Weaknesses: none`;
+        // }
+
+        let twoTimesWeakness = [];
+        let fourTimesWeakness = [];
+
+        // Seperate weaknesses with multipliers
+        Object.keys(typeEffectiveness).forEach(type => {
+            if (typeEffectiveness[type] === 4) {
+                fourTimesWeakness.push(type.charAt(0).toUpperCase() + type.slice(1));
+            }
+            else if (typeEffectiveness[type] === 2) {
+                twoTimesWeakness.push(type.charAt(0).toUpperCase() + type.slice(1));
+            }
+        });
+
+
+        let weaknessText = "Weaknesses: ";
+        
+        if (fourTimesWeakness.length > 0) {
+            weaknessText += fourTimesWeakness.map(type => `${type} (4x)`).join(', ');
+            if (twoTimesWeakness.length> 0) {
+                weaknessText += ", ";
+            }
+        }
+        
+        if (twoTimesWeakness.length > 0) {
+            weaknessText += twoTimesWeakness.map(type => `${type} (2x)`).join(', ');
+        }
+        
+        if (fourTimesWeakness.length === 0 && twoTimesWeakness.length === 0) {
+            weaknessText += "None";
+        }
+
+        weaknessesElement.textContent = weaknessText;
 
     }
     catch(error) {

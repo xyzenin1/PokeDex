@@ -6,7 +6,7 @@ p {
     display: flex;
     margin:0px;
     background-color: blue;
-    width: 200px;
+    width: 250px;
     height: 200px;
     
 
@@ -14,21 +14,22 @@ p {
 
 #userInput {
     display: flex;
+    width: 245px;
 
 }
 
 #pokemonInfoDisplay {
     background-color: red;
     color: black;
-    width: 200px;
-    height: 200px;
+    width: 250px;
+    height: 250px;
 }
 
 #pokemonSprite {
     height: 200px;
     background-color: lightblue;
     display: none;
-    width: 200px;
+    width: 250px;
     height: 200px;
     background-position: center;
     background-size: contain;
@@ -42,7 +43,7 @@ p {
     background-color: lightblue;
     background-image: url(./images/pokeball.jpg);
     display: block;
-    width: 200px;
+    width: 250px;
     height: 200px;
     background-position: center;
     background-size: contain;
@@ -55,6 +56,6 @@ p {
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
-    width: 200px;
+    width: 250px;
     height: 200px;
 }

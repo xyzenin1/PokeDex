@@ -15,10 +15,15 @@ function getPokemon() {
         return;
     }
 
-    fetch(`https://pokeapi.co/api/v2/pokemon/${inputValue}/`)
-        .then(response => response.json())
-        .then(data => console.log(data))
-        .catch(error => console.error(error));
+    try {
+        fetch(`https://pokeapi.co/api/v2/pokemon/${inputValue}/`)
+            .then(response => response.json())
+            .then(data => console.log(data))
+            .catch(error => console.error(error));
+    }
+    catch(error) {
+        console.error(error);
+    }
 }
 
 myInput.addEventListener('keydown', function(event) {

@@ -1,5 +1,8 @@
 const myInput = document.getElementById('userInput');
 
+let twoTimesWeakness = [];
+let fourTimesWeakness = [];
+
 async function getPokemon() {
     const inputValue = myInput.value.trim();
 
@@ -101,8 +104,7 @@ async function getTypeEffectiveness(pokemonTypes) {
         // start each type effectiveness at 1
         allTypes.forEach(type => {
             typeEffectiveness[type] = 1;
-        }
-        );
+        });
 
         for (let i = 0; i < pokemonTypes.length; i++) {
             const typeInfo = pokemonTypes[i];
@@ -137,8 +139,8 @@ async function getTypeEffectiveness(pokemonTypes) {
         //     weaknessesElement.textContent = `Weaknesses: none`;
         // }
 
-        let twoTimesWeakness = [];
-        let fourTimesWeakness = [];
+        twoTimesWeakness = [];
+        fourTimesWeakness = [];
 
         // Seperate weaknesses with multipliers
         Object.keys(typeEffectiveness).forEach(type => {
@@ -153,9 +155,11 @@ async function getTypeEffectiveness(pokemonTypes) {
 
         let weaknessText = "Weaknesses: ";
         
+        // if fourTimes array is greater than 0, add in to textContent
+        // if twoTimes element is detected after fourTimes array, add comma to seperate
         if (fourTimesWeakness.length > 0) {
             weaknessText += fourTimesWeakness.map(type => `${type} (4x)`).join(', ');
-            if (twoTimesWeakness.length> 0) {
+            if (twoTimesWeakness.length > 0) {
                 weaknessText += ", ";
             }
         }
@@ -169,6 +173,28 @@ async function getTypeEffectiveness(pokemonTypes) {
         }
 
         weaknessesElement.textContent = weaknessText;
+
+
+        // For now it will only print out resistances
+        if (allResistances.size > 0) {
+            const resistanceArray = Array.from(allResistances).map(resistance =>
+                resistance.charAt(0).toUpperCase() + resistance.slice(1)
+            );
+            resistancesElement.textContent = `Resistances: ${resistanceArray.join(', ')}`;
+        }
+        else {
+            resistancesElement.textContent = `Resistances: none`;
+        }
+
+        if (allImmunities.size > 0) {
+            const immunityArray = Array.from(allImmunities).map(immunity =>
+                immunity.charAt(0).toUpperCase() + immunity.slice(1)
+            );
+            immunitiesElement.textContent = `Immunities: ${immunityArray.join(', ')}`;
+        }
+        else {
+            immunitiesElement.textContent = `Immunities: None`;
+        }
 
     }
     catch(error) {

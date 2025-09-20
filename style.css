@@ -28,7 +28,7 @@ p {
 }
 
 #blueCircle {
-    background-color: blue;
+    background-color: #005956;
     margin-top: 15px;
     margin-bottom: -35px;
     margin-left: 20px;
@@ -36,8 +36,11 @@ p {
     height: 100px;
     border-radius: 50px;
     border: 3px solid;
-    border-color: gray;
-    border-width: 5px;
+    border-width: 3px;
+    box-shadow:
+        0 0 0 3px black,
+        0 0 0 6px gray,
+        0 0 0 9px black;
 }
 
 #userInput {

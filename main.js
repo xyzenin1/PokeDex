@@ -3,6 +3,19 @@ const myInput = document.getElementById('userInput');
 let twoTimesWeakness = [];
 let fourTimesWeakness = [];
 
+
+const blueLight = document.getElementById('blueCircle');
+const lightUpColors = ['#005956', '#00fcf4'];
+
+let colorIndex = 0;
+
+function changeBlueLightColor() {
+    blueLight.style.backgroundColor = lightUpColors[colorIndex];
+    colorIndex = (colorIndex + 1) % lightUpColors.length;       // cycle through lightUpColors
+}
+
+const intervalId = setInterval(changeBlueLightColor, 1000);
+
 async function getPokemon() {
     const inputValue = myInput.value.trim();
 

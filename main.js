@@ -70,6 +70,10 @@ async function getPokemon() {
             const name = document.getElementById("name");
             name.textContent = `Name: ${data.name.charAt(0).toUpperCase() + data.name.slice(1)}`;
 
+            // for pokemon ID
+            const id = document.getElementById("id");
+            id.textContent = `ID: ${data.id}`;
+
             // for weight
             const weight = document.getElementById("weight");
             const newWeight = (data.weight * 100) * 0.0022;
@@ -257,7 +261,7 @@ async function getStats(pokemonStats) {
         specialDefenseDisplay.textContent = `Special Defense: ${specialDefenseStat.base_stat}`;
         speedDisplay.textContent = `Speed: ${speedStat.base_stat}`;
 
-        
+
 
         return stats;
     }

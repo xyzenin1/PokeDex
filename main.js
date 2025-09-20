@@ -95,6 +95,8 @@ async function getPokemon() {
 
             await getTypeEffectiveness(data.types);
 
+            await getStats(data.stats);
+
     }
     catch(error) {
         console.error(error);
@@ -220,6 +222,52 @@ async function getTypeEffectiveness(pokemonTypes) {
         console.error(error);
     }
 }
+
+
+async function getStats(pokemonStats) {
+    
+    const hpDisplay = document.getElementById('statLabelHP');
+    const attackDisplay = document.getElementById('statLabelAttack');
+    const defenseDisplay = document.getElementById('statLabelDefense');
+    const specialAttackDisplay = document.getElementById('statLabelSpecialAttack');
+    const specialDefenseDisplay = document.getElementById('statLabelSpecialDefense');
+    const speedDisplay = document.getElementById('statLabelSpeed');
+
+    try {
+        const stats = pokemonStats.map(statInfo => ({
+            name: statInfo.stat.name,
+            base_stat: statInfo.base_stat
+        }));
+
+        stats.forEach(stat => {
+            console.log(`${stat.name}: ${stat.base_stat}`);
+        });
+
+        const hpStat = stats.find(stat => stat.name === 'hp');
+        const attackStat = stats.find(stat => stat.name === 'attack');
+        const defenseStat = stats.find(stat => stat.name === 'defense');
+        const specialAttackStat = stats.find(stat => stat.name === 'special-attack');
+        const specialDefenseStat = stats.find(stat => stat.name === 'special-defense');
+        const speedStat = stats.find(stat => stat.name === 'speed');
+
+        hpDisplay.textContent = `HP: ${hpStat.base_stat}`;
+        attackDisplay.textContent = `Attack: ${attackStat.base_stat}`;
+        defenseDisplay.textContent = `Defense: ${defenseStat.base_stat}`;
+        specialAttackDisplay.textContent = `Special Attack: ${specialAttackStat.base_stat}`;
+        specialDefenseDisplay.textContent = `Special Defense: ${specialDefenseStat.base_stat}`;
+        speedDisplay.textContent = `Speed: ${speedStat.base_stat}`;
+
+        
+
+        return stats;
+    }
+    catch(error) {
+        console.error(error);
+    }
+}
+
+
+
 
 myInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {

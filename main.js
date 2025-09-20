@@ -18,6 +18,12 @@ const intervalId = setInterval(changeBlueLightColor, 1000);
 
 async function getPokemon() {
     const inputValue = myInput.value.trim();
+    
+    // if function is called, unhide pokemonInfo
+    const pokemonInfoElements = document.getElementsByClassName('pokemonInfo');
+    for (let i = 0; i < pokemonInfoElements.length; i++) {
+        pokemonInfoElements[i].style.display = 'block';
+    }
 
     if (!inputValue) {
         console.error("No input value was read");

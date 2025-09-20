@@ -8,10 +8,6 @@ p {
     color: black
 }
 
-.hidden {
-    display: none;
-}
-
 #container {
     display: flex;
     margin-top: 80px;
@@ -69,25 +65,29 @@ p {
 
 
 #pokemonInfoDisplay {
-    background-color: red;
+    background-color: #31402f;
     color: black;
     width: 300px;
-    height: 300px;
-    justify-content: center;
-    align-items: center;
+    height: 310px;
+    display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-direction: column;
     overflow: hidden;
     margin-top: 0;
     margin-left: 0;
+    border: 5px solid;
 }
 
 .pokemonInfo {
     margin-left: 10px;
     padding: 5px;
     display: none;
+    flex: 1;
 }
 
 /* #pokemonImage {
-    
+
 } */
 
 #pokemonSprite {
@@ -118,6 +118,14 @@ p {
     border-top-width: 15px;
     border-left-width: 60px;
     border-bottom-width: 75px;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 80%);
+
+}
+
+#pokeball_border {
+    display: inline-block;
+    background-color: black;
+    padding: 5px;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 80%);
 }
 

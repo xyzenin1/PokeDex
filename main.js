@@ -68,7 +68,7 @@ async function getPokemon() {
 
             // for name
             const name = document.getElementById("name");
-            name.textContent = `Name: ${data.name}`;
+            name.textContent = `Name: ${data.name.charAt(0).toUpperCase() + data.name.slice(1)}`;
 
             // for weight
             const weight = document.getElementById("weight");

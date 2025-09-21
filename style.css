@@ -182,6 +182,54 @@ p {
     background-color: #161716;
 }
 
+#descriptionBox {
+    width: 320px;
+    height: 200px;
+    background-color:#31402f;
+    position: absolute;
+    border: 3px solid black;
+    bottom: 225px;
+    left: 115px;
+}
+
+
+
+#pokemonCryButton {
+    position: absolute;
+    width: 50px;
+    height: 25px;
+    bottom: 475px;
+    background-color: red;
+    border: 3px solid black;
+    border-radius: 5px;
+    margin-left: 125px;
+}
+
+#pokemonCryButton:hover {
+    background-color: darkred;
+    transition: 0.5s ease;
+}
+
+#speaker_container {
+    width: 85px;
+    height: 10px;
+    position: absolute;
+    background-color: gray;
+    grid-template-columns: 1fr;
+    grid-template-rows: repeat(3, 1fr);
+    margin-left: 225px;
+    bottom: 500px;
+}
+
+.speakerBox {
+    background-color: black;
+    width: 100%;
+    flex: 1;
+    padding: 2px;
+    border: 1px solid gray;
+    border-radius: 5px;
+}
+
 
 .lit {
     background-color: aqua;

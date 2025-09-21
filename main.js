@@ -1,11 +1,16 @@
 const myInput = document.getElementById('userInput');
 const id = document.getElementById("id");
+const description = document.getElementById("descriptionBox");
 
 let twoTimesWeakness = [];
 let fourTimesWeakness = [];
+let halfResistance = [];
+let quarterResistance = [];
 
 let isPokemonShiny = false;
 const shinyButton = document.getElementById("shinyButton");
+
+const pokemonCryButton = document.getElementById('pokemonCryButton');
 
 const blueLight = document.getElementById('blueCircle');
 const lightUpColors = ['#005956', '#00fcf4'];
@@ -19,7 +24,7 @@ function changeBlueLightColor() {
 
 const intervalId = setInterval(changeBlueLightColor, 1000);
 
-async function getPokemon() {
+async function getPokemonData() {
     const inputValue = myInput.value.trim();
     
     // if function is called, unhide pokemonInfo
@@ -70,6 +75,13 @@ async function getPokemon() {
                 pokeball.style.display = "block";
             }
 
+            // for descirption
+            let pokemonEntry = await getPokemonDescription(data.name);
+            // debug
+            if (pokemonEntry) {
+                console.log(`description: ${pokemonEntry}`);
+            }
+
             // for name
             const name = document.getElementById("name");
             name.textContent = `Name: ${data.name.charAt(0).toUpperCase() + data.name.slice(1)}`;
@@ -114,7 +126,7 @@ async function getPokemon() {
 async function getTypeEffectiveness(pokemonTypes) {
 
     const weaknessesElement = document.getElementById("weaknesses");
-    const resistancesElement = document.getElementById("resistances");
+    const resistanceElement = document.getElementById("resistances");
     const immunitiesElement = document.getElementById("immunities");
 
     try {
@@ -150,6 +162,7 @@ async function getTypeEffectiveness(pokemonTypes) {
             const resistantTo = typeData.damage_relations.half_damage_from;
             resistantTo.forEach(resistance => {
                 allResistances.add(resistance.name);
+                typeEffectiveness[resistance.name] *= 0.5;
             });
 
             const immuneTo = typeData.damage_relations.no_damage_from;
@@ -170,6 +183,8 @@ async function getTypeEffectiveness(pokemonTypes) {
 
         twoTimesWeakness = [];
         fourTimesWeakness = [];
+        halfResistance = [];
+        quarterResistance = [];
 
         // Seperate weaknesses with multipliers
         Object.keys(typeEffectiveness).forEach(type => {
@@ -179,6 +194,13 @@ async function getTypeEffectiveness(pokemonTypes) {
             else if (typeEffectiveness[type] === 2) {
                 twoTimesWeakness.push(type.charAt(0).toUpperCase() + type.slice(1));
             }
+            else if (typeEffectiveness[type] === 0.25) {
+                quarterResistance.push(type.charAt(0).toUpperCase() + type.slice(1));
+            }
+            else if (typeEffectiveness[type] === 0.5) {
+                halfResistance.push(type.charAt(0).toUpperCase() + type.slice(1));
+            }
+
         });
 
 
@@ -201,19 +223,44 @@ async function getTypeEffectiveness(pokemonTypes) {
             weaknessText += "None";
         }
 
+
         weaknessesElement.textContent = weaknessText;
 
 
         // For now it will only print out resistances
-        if (allResistances.size > 0) {
-            const resistanceArray = Array.from(allResistances).map(resistance =>
-                resistance.charAt(0).toUpperCase() + resistance.slice(1)
-            );
-            resistancesElement.textContent = `Resistances: ${resistanceArray.join(', ')}`;
+        // if (allResistances.size > 0) {
+        //     const resistanceArray = Array.from(allResistances).map(resistance =>
+        //         resistance.charAt(0).toUpperCase() + resistance.slice(1)
+        //     );
+        //     resistancesElement.textContent = `Resistances: ${resistanceArray.join(', ')}`;
+        // }
+        // else {
+        //     resistancesElement.textContent = `Resistances: none`;
+        // }
+
+
+        let resistanceText = "Resistances: ";
+
+        if (quarterResistance.length > 0) {
+            resistanceText += quarterResistance.map(type => `${type} (0.25)`).join(', ');
+            if (halfResistance.length > 0) {
+                resistanceText += ', ';
+            }
         }
-        else {
-            resistancesElement.textContent = `Resistances: none`;
+
+        if (halfResistance.length > 0) {
+            resistanceText += halfResistance.map(type => `${type} (0.5)`).join(', ');
         }
+
+        if (halfResistance.length === 0 && quarterResistance.length === 0) {
+            resistanceText += "None";
+        }
+
+        resistanceElement.textContent = resistanceText;
+
+
+
+
 
         if (allImmunities.size > 0) {
             const immunityArray = Array.from(allImmunities).map(immunity =>
@@ -313,6 +360,43 @@ function playPokemonSound(pokemonId) {
     pokemonAudio.play();
 }
 
+async function getPokemonDescription(pokemonName) {
+
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}/`);
+
+        if (!response.ok) {
+            throw new Error("Resource could not be fetched");
+        }
+
+        const data = await response.json();
+
+        const speciesResponse = await fetch(data.species.url);
+        if (!speciesResponse.ok) {
+            throw new Error("Error occured, as species data could not be fetched");
+        }
+        const speciesData = await speciesResponse.json();
+
+        const englishEntry = speciesData.flavor_text_entries.find(
+            entry => entry.language.name === 'en'
+        );
+
+         const cleanDescription = englishEntry.flavor_text
+            .replace(/\f/g, ' ')  // Replace form feed characters
+            .replace(/\n/g, ' ')  // Replace newlines
+            .replace(/\s+/g, ' ') // Replace multiple spaces with single space
+            .trim();
+        
+        description.textContent = cleanDescription;
+        return cleanDescription;
+    }
+    catch(error) {
+        console.error(error);
+    }
+}
+
+
+
 function shinySprite() {
     shinyButton.classList.toggle('active');
     isPokemonShiny = shinyButton.classList.contains('active');
@@ -321,11 +405,15 @@ function shinySprite() {
 
 myInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
-        getPokemon();
+        getPokemonData();
     }
 });
 
 shinyButton.addEventListener('click', () => {
     shinySprite();
-    getPokemon();
+    getPokemonData();
+});
+
+pokemonCryButton.addEventListener('click', () => {
+    playPokemonSound(id.myUniversalGlobal);
 });

@@ -76,6 +76,7 @@ async function getPokemon() {
 
             // for pokemon ID
             id.textContent = `ID: ${data.id}`;
+            id.myUniversalGlobal = data.id;     // id is now global variable
 
             // for weight
             const weight = document.getElementById("weight");

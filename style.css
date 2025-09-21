@@ -141,7 +141,7 @@ p {
 #hp, #attack, #defense, #specialAttack, #specialDefense, #speed {
     display: flex;
     flex-direction: column;
-    background-color: white;
+    background-color: black;
     border: 1px solid black;
     gap: 1px;
 }
@@ -151,6 +151,7 @@ p {
     width: 100%;
     height: 10px;
     flex: 1;
+    border: 1px solid black;
 }
 
 #statLabelHP, #statLabelAttack, #statLabelDefense, #statLabelSpecialAttack, #statLabelSpecialDefense, #statLabelSpeed {

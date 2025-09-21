@@ -74,7 +74,7 @@ p {
     justify-content: flex-start;
     align-items: stretch;
     flex-direction: column;
-    overflow: hidden;
+    overflow: auto;
     margin-top: 0;
     margin-left: 0;
     border: 5px solid;
@@ -116,7 +116,6 @@ p {
     border-left-width: 60px;
     border-bottom-width: 75px;
     clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 20% 100%, 0% 80%);
-
 }
 
 #pokeball_border {
@@ -132,6 +131,7 @@ p {
     border: 3px solid black;
     display: grid;
     margin-top: 50px;
+    margin-right: 5px;
     gap: 10px;
     padding: 10px;
     grid-template-columns: repeat(6, 1fr);
@@ -159,4 +159,30 @@ p {
     font-weight: bold;
     color: black;
     padding: 5px 0;
+}
+
+
+#shinyButton {
+    width: 50px;
+    height: 50px;
+    border-radius: 50px;
+    border: 5px solid black;
+    display: flex;
+    margin-left: 25px;
+    transition: 0.5s ease;
+    background-color: #3b3d3b;
+}
+
+#shinyButton:hover {
+    background-color: #161716;
+}
+
+#shinyButton.active {
+    background-color: #161716;
+}
+
+
+.lit {
+    background-color: aqua;
+    transition: background-color 0.3s ease;
 }

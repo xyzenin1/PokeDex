@@ -1,8 +1,11 @@
 const myInput = document.getElementById('userInput');
+const id = document.getElementById("id");
 
 let twoTimesWeakness = [];
 let fourTimesWeakness = [];
 
+let isPokemonShiny = false;
+const shinyButton = document.getElementById("shinyButton");
 
 const blueLight = document.getElementById('blueCircle');
 const lightUpColors = ['#005956', '#00fcf4'];
@@ -38,10 +41,8 @@ async function getPokemon() {
     }
 
     try {
-
-        const pokemonName = document.getElementById("pokemonName");
         
-        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${inputValue}/`)
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${inputValue}/`);
  
             if (!response.ok) {
                 throw new Error("Resource could not be fetched");
@@ -49,14 +50,17 @@ async function getPokemon() {
             
             const data = await response.json();
             console.log(data);      // data will be shown in console
-            
-            // for image
 
-            const pokemonSprite = data.sprites.front_default;
+            // for image
+            let pokemonSprite = data.sprites.front_default;
             const imageElement = document.getElementById("pokemonSprite");
             const pokeball = document.getElementById("pokeball");
             
             if (pokemonSprite) {
+                // if shiny button is active
+                if (isPokemonShiny) {
+                    pokemonSprite = data.sprites.front_shiny;
+                }
                 pokeball.style.display = "none";
                 imageElement.src = pokemonSprite;
                 imageElement.style.display = "block";
@@ -71,7 +75,6 @@ async function getPokemon() {
             name.textContent = `Name: ${data.name.charAt(0).toUpperCase() + data.name.slice(1)}`;
 
             // for pokemon ID
-            const id = document.getElementById("id");
             id.textContent = `ID: ${data.id}`;
 
             // for weight
@@ -238,15 +241,19 @@ async function getStats(pokemonStats) {
     const speedDisplay = document.getElementById('statLabelSpeed');
 
     try {
+
+        // add values to a map; set name and base stat
         const stats = pokemonStats.map(statInfo => ({
             name: statInfo.stat.name,
             base_stat: statInfo.base_stat
         }));
 
+        // for debug
         stats.forEach(stat => {
             console.log(`${stat.name}: ${stat.base_stat}`);
         });
 
+        // find stat name to get data
         const hpStat = stats.find(stat => stat.name === 'hp');
         const attackStat = stats.find(stat => stat.name === 'attack');
         const defenseStat = stats.find(stat => stat.name === 'defense');
@@ -261,6 +268,13 @@ async function getStats(pokemonStats) {
         specialDefenseDisplay.textContent = `Special Defense: ${specialDefenseStat.base_stat}`;
         speedDisplay.textContent = `Speed: ${speedStat.base_stat}`;
 
+        // change box colors accordingly
+        lightUpBoxes('hp', hpStat.base_stat);
+        lightUpBoxes('attack', attackStat.base_stat);
+        lightUpBoxes('defense', defenseStat.base_stat);
+        lightUpBoxes('specialAttack', specialAttackStat.base_stat);
+        lightUpBoxes('specialDefense', specialDefenseStat.base_stat);
+        lightUpBoxes('speed', speedStat.base_stat);
 
 
         return stats;
@@ -270,12 +284,47 @@ async function getStats(pokemonStats) {
     }
 }
 
+function lightUpBoxes(statName, statValue) {
+    const pointsPerBox = 17;        // max number for each box
+    const boxesToLight = Math.min(Math.ceil(statValue / pointsPerBox), 15);     // get how many boxes needed to be lit up
 
+    const statBoxes = document.querySelectorAll(`.${statName}Box`);
+    // reverse array to display boxes from bottom to top
+    const statsArray = Array.from(statBoxes);
+    statsArray.reverse();
+
+    // indexes each box from each stat column
+    statsArray.forEach((box, index) => {
+        if (index < boxesToLight) {
+            box.classList.add('lit');
+        }
+        else {
+            box.classList.remove('lit');
+        }
+    });
+
+}
+
+function playPokemonSound(pokemonId) {
+    const pokemonCry = `https://raw.githubusercontent.com/PokeAPI/cries/main/cries/pokemon/latest/${pokemonId}.ogg`
+    const pokemonAudio = new Audio(pokemonCry);
+    pokemonAudio.volume = 0.25;
+    pokemonAudio.play();
+}
+
+function shinySprite() {
+    shinyButton.classList.toggle('active');
+    isPokemonShiny = shinyButton.classList.contains('active');
+}
 
 
 myInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         getPokemon();
     }
+});
 
+shinyButton.addEventListener('click', () => {
+    shinySprite();
+    getPokemon();
 });

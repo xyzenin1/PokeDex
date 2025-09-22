@@ -1,6 +1,9 @@
 const myInput = document.getElementById('userInput');
 const id = document.getElementById("id");
+const pokemonInfoElements = document.getElementsByClassName('pokemonInfo');
 const description = document.getElementById("descriptionBox");
+const movesetButton = document.getElementById("movesetButton");
+const moveListElements = document.getElementsByClassName('moveListInfo');
 
 let twoTimesWeakness = [];
 let fourTimesWeakness = [];
@@ -28,7 +31,6 @@ async function getPokemonData() {
     const inputValue = myInput.value.trim();
     
     // if function is called, unhide pokemonInfo
-    const pokemonInfoElements = document.getElementsByClassName('pokemonInfo');
     for (let i = 0; i < pokemonInfoElements.length; i++) {
         pokemonInfoElements[i].style.display = 'block';
     }
@@ -85,10 +87,11 @@ async function getPokemonData() {
             // for name
             const name = document.getElementById("name");
             name.textContent = `Name: ${data.name.charAt(0).toUpperCase() + data.name.slice(1)}`;
+            name_global = data.name; // name is now a global variable
 
             // for pokemon ID
             id.textContent = `ID: ${data.id}`;
-            id.myUniversalGlobal = data.id;     // id is now global variable
+            id_global = data.id;     // id is now global variable
 
             // for weight
             const weight = document.getElementById("weight");
@@ -149,7 +152,11 @@ async function getTypeEffectiveness(pokemonTypes) {
 
         for (let i = 0; i < pokemonTypes.length; i++) {
             const typeInfo = pokemonTypes[i];
+
+            // debug purposes
             console.log(`Fetching data type: ${typeInfo.type.name}`);
+
+            // fetch type info
             const typeResponse = await fetch(typeInfo.type.url);
             const typeData = await typeResponse.json();
 
@@ -257,8 +264,6 @@ async function getTypeEffectiveness(pokemonTypes) {
         }
 
         resistanceElement.textContent = resistanceText;
-
-
 
 
 
@@ -395,6 +400,56 @@ async function getPokemonDescription(pokemonName) {
     }
 }
 
+async function showMoveList(pokemonName) {
+
+    try {
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}/`);
+
+        if (!response.ok) {
+            throw new Error("Error occured while fetching data!");
+        }
+        const data = await response.json();
+        console.log(data.moves);
+
+
+        // hide pokemonInfo to make room for move list
+        for (let i = 0; i < pokemonInfoElements.length; i++) {
+            pokemonInfoElements[i].style.display = 'none';
+        }
+
+        for (let j = 0; j < moveListElements.length; j++) {
+            moveListElements[j].style.display = 'block';
+        }
+        
+        let allMoves = [];
+
+        data.moves.forEach(moveEntry => {
+            const moveName = moveEntry.move.name;
+            allMoves.push(moveName.charAt(0).toUpperCase() + moveName.slice(1).replace(/-/g, ' '));
+        });
+
+        // debug purposes
+        console.log(allMoves);
+
+        if (allMoves.length > 0) {
+            const moveListText = `Move List: ${allMoves.join(', ')}`;
+            for (let i = 0; i < moveListElements.length; i++) {
+                moveListElements[i].textContent = moveListText;
+            }
+        }
+        else {
+            for (let i = 0; i < moveListElements.length; i++) {
+                moveListElements[i].textContent = 'Move List: none';
+            }
+        }
+
+    }
+    catch(error) {
+        console.log(error);
+    }
+    
+}
+
 
 
 function shinySprite() {
@@ -406,6 +461,9 @@ function shinySprite() {
 myInput.addEventListener('keydown', function(event) {
     if (event.key === 'Enter') {
         getPokemonData();
+        for (let j = 0; j < moveListElements.length; j++) {
+            moveListElements[j].style.display = 'none';
+        }
     }
 });
 
@@ -415,5 +473,9 @@ shinyButton.addEventListener('click', () => {
 });
 
 pokemonCryButton.addEventListener('click', () => {
-    playPokemonSound(id.myUniversalGlobal);
+    playPokemonSound(id_global);
+});
+
+movesetButton.addEventListener('click', () => {
+    showMoveList(name_global);
 });

@@ -81,10 +81,30 @@ p {
 }
 
 .pokemonInfo {
-    margin-left: 10px;
+    margin-left: 5px;
     padding: 5px;
     display: none;
     flex: 1;
+}
+
+.moveListInfo {
+    margin-left: 5px;
+    padding: 5px;
+    display: none;
+    flex: 1;
+}
+
+#movesetButton {
+    width: 80px;
+    height: 15px;
+    border-radius: 50px;
+    position: absolute;
+    margin-left: 120px;
+    background-color: red;
+}
+
+#movesetButton:hover {
+    background-color: darkred;
 }
 
 #pokemonSprite {
@@ -184,13 +204,13 @@ p {
 
 #descriptionBox {
     width: 320px;
-    height: 200px;
+    height: 100px;
     background-color:#31402f;
     position: absolute;
     display: flex;
     border: 3px solid black;
     left: 115px;
-    margin-top: -300px;
+    margin-top: -200px;
 }
 
 

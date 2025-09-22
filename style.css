@@ -187,9 +187,10 @@ p {
     height: 200px;
     background-color:#31402f;
     position: absolute;
+    display: flex;
     border: 3px solid black;
-    bottom: 225px;
     left: 115px;
+    margin-top: -300px;
 }
 
 

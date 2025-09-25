@@ -420,21 +420,93 @@ async function showMoveList(pokemonName) {
         for (let j = 0; j < moveListElements.length; j++) {
             moveListElements[j].style.display = 'block';
         }
-        
-        let allMoves = [];
+
+
+
+        const movesByMethod = {
+            'level-up': [],
+            'machine': [],
+            'tutor': [],
+            'egg': [],
+            'other': []
+        };
 
         data.moves.forEach(moveEntry => {
             const moveName = moveEntry.move.name;
-            allMoves.push(moveName.charAt(0).toUpperCase() + moveName.slice(1).replace(/-/g, ' '));
+            const formatMoveName = moveName.charAt(0).toUpperCase() + moveName.slice(1).replace(/-/g, ' ');
+
+            // latest pokemon generation/game
+            const version = moveEntry.version_group_details[moveEntry.version_group_details.length - 1];
+            const learnMethod = version.move_learn_method.name;
+            const levelLearned = version.level_learned_at;
+
+            const moveInfo = {
+                name: formatMoveName,
+                level: levelLearned,
+                method: learnMethod
+            };
+
+            if (learnMethod === 'level-up') {
+                movesByMethod['level-up'].push(moveInfo);
+            }
+            else if (learnMethod === 'machine') {
+                movesByMethod['machine'].push(moveInfo);
+            }
+            else if (learnMethod === 'tutor') {
+                movesByMethod['tutor'].push(moveInfo);
+            }
+            else if (learnMethod === 'egg') {
+                movesByMethod['egg'].push(moveInfo);
+            }
+            else {
+                movesByMethod['other'].push(moveInfo);
+            }
         });
 
-        // debug purposes
-        console.log(allMoves);
+        movesByMethod['level-up'].sort((a, b) => a.level - b.level);
 
-        if (allMoves.length > 0) {
-            const moveListText = `Move List: ${allMoves.join(', ')}`;
-            for (let i = 0; i < moveListElements.length; i++) {
-                moveListElements[i].textContent = moveListText;
+        movesByMethod['machine'].sort((a, b) => a.name.localeCompare(b.name));
+        movesByMethod['tutor'].sort((a, b) => a.name.localeCompare(b.name));
+        movesByMethod['egg'].sort((a, b) => a.name.localeCompare(b.name));
+        movesByMethod['other'].sort((a, b) => a.name.localeCompare(b.name));
+
+
+        let moveListText = ' ';
+
+        if (movesByMethod['level-up'].length > 0) {
+            moveListText += 'Level-Up Moves: ';
+            moveListText += movesByMethod['level-up'].map(move =>
+                move.level > 0 ? `${move.name} (Lv.${move.level})` : `${move.name} (Start)`
+            ).join(', ');
+            moveListText += '\n\n';
+        }   
+        if (movesByMethod['machine'].length > 0) {
+            moveListText += 'TM/HM Moves: ';
+            moveListText += movesByMethod['machine'].map(move => move.name).join(', ');
+            moveListText += '\n\n';
+        }
+        if (movesByMethod['tutor'].length > 0) {    
+            moveListText += 'Tutor Moves: ';
+            moveListText += movesByMethod['tutor'].map(move => move.name).join(', ');
+            moveListText += '\n\n';
+        }
+        if (movesByMethod['egg'].length > 0) {
+            moveListText += 'Egg Moves: ';
+            moveListText += movesByMethod['egg'].map(move => move.name).join(', ');
+            moveListText += '\n\n';
+        }
+        if (movesByMethod['other'].length > 0) {
+            moveListText += 'Other Moves: ';
+            moveListText += movesByMethod['other'].map(move => move.name).join(', ');
+        }
+
+        moveListText = moveListText.trim();
+
+        console.log('organized Moves: ', movesByMethod);
+        
+        if (moveListText) {
+            for (let i = 0; i < moveListText.length; i++) {
+                moveListElements[i].innerHTML = moveListText.replace(/\n/g, '<br>');
             }
         }
         else {
@@ -442,6 +514,30 @@ async function showMoveList(pokemonName) {
                 moveListElements[i].textContent = 'Move List: none';
             }
         }
+
+
+        
+        // let allMoves = [];
+
+        // data.moves.forEach(moveEntry => {
+        //     const moveName = moveEntry.move.name;
+        //     allMoves.push(moveName.charAt(0).toUpperCase() + moveName.slice(1).replace(/-/g, ' '));
+        // });
+
+        // // debug purposes
+        // console.log(allMoves);
+
+        // if (allMoves.length > 0) {
+        //     const moveListText = `Move List: ${allMoves.join(', ')}`;
+        //     for (let i = 0; i < moveListElements.length; i++) {
+        //         moveListElements[i].textContent = moveListText;
+        //     }
+        // }
+        // else {
+        //     for (let i = 0; i < moveListElements.length; i++) {
+        //         moveListElements[i].textContent = 'Move List: none';
+        //     }
+        // }
 
     }
     catch(error) {

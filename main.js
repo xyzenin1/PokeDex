@@ -4,11 +4,20 @@ const pokemonInfoElements = document.getElementsByClassName('pokemonInfo');
 const description = document.getElementById("descriptionBox");
 const movesetButton = document.getElementById("movesetButton");
 const moveListElements = document.getElementsByClassName('moveListInfo');
+const generationSelect = document.getElementById('generationSelect');
+
+
+let minLevel = 1;
+let maxLevel = 100;
 
 let twoTimesWeakness = [];
 let fourTimesWeakness = [];
 let halfResistance = [];
 let quarterResistance = [];
+
+let generation = 9;      // default generation is set to 9
+let name_global = '';
+let id_global = '';
 
 let isPokemonShiny = false;
 const shinyButton = document.getElementById("shinyButton");
@@ -19,6 +28,7 @@ const blueLight = document.getElementById('blueCircle');
 const lightUpColors = ['#005956', '#00fcf4'];
 
 let colorIndex = 0;
+      // set initial generation value
 
 function changeBlueLightColor() {
     blueLight.style.backgroundColor = lightUpColors[colorIndex];
@@ -421,7 +431,8 @@ async function showMoveList(pokemonName) {
             moveListElements[j].style.display = 'block';
         }
 
-
+        minLevel = await getMinimumLevel(pokemonName);
+        console.log(`Minimum Level: ${minLevel}`);
 
         const movesByMethod = {
             'level-up': [],
@@ -438,13 +449,15 @@ async function showMoveList(pokemonName) {
             // latest pokemon generation/game
             const version = moveEntry.version_group_details[moveEntry.version_group_details.length - 1];
             const learnMethod = version.move_learn_method.name;
-            const levelLearned = version.level_learned_at;
+            let levelLearned = version.level_learned_at;
+            
 
             const moveInfo = {
                 name: formatMoveName,
                 level: levelLearned,
                 method: learnMethod
             };
+
 
             if (learnMethod === 'level-up') {
                 movesByMethod['level-up'].push(moveInfo);
@@ -546,12 +559,118 @@ async function showMoveList(pokemonName) {
     
 }
 
+function getGeneration() {
+
+    const selectedGeneration = Number(generationSelect.value);
+
+    switch (selectedGeneration) {
+        case 1:
+            generation = 1;
+            break;
+        case 2:
+            generation = 2;
+            break;
+        case 3:
+            generation = 3;
+            break;
+        case 4:
+            generation = 4;
+            break;
+        case 5:
+            generation = 5;
+            break;
+        case 6:
+            generation = 6;
+            break;
+        case 7:
+            generation = 7;
+            break;
+        case 8:
+            generation = 8;
+            break;
+        case 9:
+            generation = 9;
+            break;
+        default:
+            generation = 9;
+    }
+    console.log(`Generation set to: ${generation}`);
+    
+}
+
+
+
+
+
+async function getMinimumLevel(pokemonName) {
+    try {
+        // Fetch species data
+
+        const response = await fetch(`https://pokeapi.co/api/v2/pokemon/${pokemonName}/`);
+        if (!response.ok) {
+            throw new Error("Resource could not be fetched");
+        }
+        const data = await response.json();
+
+        const speciesResponse = await fetch(data.species.url);
+        const speciesData = await speciesResponse.json();
+        
+        // Fetch evolution chain
+        const evolutionResponse = await fetch(speciesData.evolution_chain.url);
+        const evolutionData = await evolutionResponse.json();
+        
+        // Function to traverse the evolution chain
+        function findMinLevel(chain, targetName, currentMinLevel = 1) {
+            // Check if this is the Pokemon we're looking for
+            if (chain.species.name === targetName) {
+                return currentMinLevel;
+            }
+            
+            // Check all evolution paths
+            for (const evolution of chain.evolves_to) {
+                // Get the evolution trigger details
+                let evolutionLevel = currentMinLevel;
+                
+                if (evolution.evolution_details.length > 0) {
+                    const details = evolution.evolution_details[0];
+                    
+                    // If it evolves by level, get that level
+                    if (details.min_level) {
+                        evolutionLevel = details.min_level;
+                    }
+                }
+                
+                // Recursively check this evolution path
+                const result = findMinLevel(evolution, targetName, evolutionLevel);
+                if (result !== null) {
+                    return result;
+                }
+            }
+            
+            return null;
+        }
+        
+        const minLevel = findMinLevel(evolutionData.chain, data.name);
+        return minLevel || 1; // Default to 1 if not found
+        
+    } catch (error) {
+        console.error('Error fetching evolution data:', error);
+        return 1; // Default to level 1 on error
+    }
+}
+
+
 
 
 function shinySprite() {
     shinyButton.classList.toggle('active');
     isPokemonShiny = shinyButton.classList.contains('active');
 }
+
+
+
+
+generationSelect.addEventListener('change', getGeneration);
 
 
 myInput.addEventListener('keydown', function(event) {

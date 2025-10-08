@@ -51,13 +51,22 @@ p {
         0 0 0 9px black;
 }
 
+#generationSelect {
+    display: flex;
+    position: absolute;
+    margin-left: 255px;
+    width: 100px;
+    height: 20px;
+    margin-top: 205px;
+}
+
 #userInput {
     display: flex;
     width: 200px;
     justify-content: center;
     align-items: center;
     margin-left: 125px;
-    margin-top: 200px;
+    margin-top: 165px;
     height: 75px;
     border-radius: 15px;
     text-align: center;
@@ -66,7 +75,7 @@ p {
 
 
 #pokemonInfoDisplay {
-    background-color: #31402f;
+    background-color: lightblue;
     color: black;
     width: 300px;
     height: 310px;
@@ -205,7 +214,7 @@ p {
 #descriptionBox {
     width: 320px;
     height: 100px;
-    background-color:#31402f;
+    background-color: lightblue;
     position: absolute;
     display: flex;
     border: 3px solid black;

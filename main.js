@@ -408,9 +408,25 @@ async function getPokemonDescription(pokemonName) {
         }
         const speciesData = await speciesResponse.json();
 
-        const englishEntry = speciesData.flavor_text_entries.find(
-            entry => entry.language.name === 'en'
-        );
+        const entriesForGeneration = speciesData.flavor_text_entries.filter(entry => {
+            if (entry.language.name !== 'en') {
+                return false;
+            }
+            
+            // Map version names to generations
+            const version = genMap[entry.version.name];
+            return version === generation;
+        });
+
+        // If no entries found for selected generation, fall back to any English entry
+        const englishEntry = entriesForGeneration.length > 0 
+            ? entriesForGeneration[0]
+            : speciesData.flavor_text_entries.find(entry => entry.language.name === 'en');
+
+        if (!englishEntry) {
+            description.textContent = "No description available.";
+            return null;
+        }
 
          const cleanDescription = englishEntry.flavor_text
             .replace(/\f/g, ' ')  // Replace form feed characters
@@ -497,6 +513,51 @@ async function showMoveList(pokemonName) {
                 movesByMethod['other'].push(moveInfo);
             }
         });
+
+
+        // fallback for when no moves are found in selected generation
+        // const totalMoves = Object.values(movesByMethod).reduce((sum, arr) => sum + arr.length, 0);
+        
+        // if (totalMoves === 0) {
+        //     console.log(`No moves found for generation ${generation}, using latest available generation`);
+            
+        //     data.moves.forEach(moveEntry => {
+        //         const moveName = moveEntry.move.name;
+        //         const formatMoveName = moveName.charAt(0).toUpperCase() + moveName.slice(1).replace(/-/g, ' ');
+
+        //         // Get the latest version (last in array)
+        //         const version = moveEntry.version_group_details[moveEntry.version_group_details.length - 1];
+
+        //         const learnMethod = version.move_learn_method.name;
+        //         let levelLearned = version.level_learned_at;
+                
+
+        //         const moveInfo = {
+        //             name: formatMoveName,
+        //             level: levelLearned,
+        //             method: learnMethod
+        //         };
+
+
+        //         if (learnMethod === 'level-up') {
+        //             movesByMethod['level-up'].push(moveInfo);
+        //         }
+        //         else if (learnMethod === 'machine') {
+        //             movesByMethod['machine'].push(moveInfo);
+        //         }
+        //         else if (learnMethod === 'tutor') {
+        //             movesByMethod['tutor'].push(moveInfo);
+        //         }
+        //         else if (learnMethod === 'egg') {
+        //             movesByMethod['egg'].push(moveInfo);
+        //         }
+        //         else {
+        //             movesByMethod['other'].push(moveInfo);
+        //         }
+        //     });
+        // }
+
+
 
         movesByMethod['level-up'].sort((a, b) => a.level - b.level);
 
@@ -692,7 +753,16 @@ function shinySprite() {
 
 
 
-generationSelect.addEventListener('change', getGeneration);
+generationSelect.addEventListener('change', () => {
+    getGeneration();
+
+    if (name_global) {
+        getPokemonData();
+        for (let j = 0; j < moveListElements.length; j++) {
+            moveListElements[j].style.display = 'none';
+        }
+    }
+});
 
 
 myInput.addEventListener('keydown', function(event) {

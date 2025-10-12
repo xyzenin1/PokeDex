@@ -19,6 +19,22 @@ let generation = 9;      // default generation is set to 9
 let name_global = '';
 let id_global = '';
 
+
+const genMap = {
+                'red-blue': 1, 'yellow': 1,
+                'gold-silver': 2, 'crystal': 2,
+                'ruby-sapphire': 3, 'emerald': 3, 'firered-leafgreen': 3,
+                'diamond-pearl': 4, 'platinum': 4, 'heartgold-soulsilver': 4,
+                'black-white': 5, 'black-2-white-2': 5,
+                'x-y': 6, 'omega-ruby-alpha-sapphire': 6,
+                'sun-moon': 7, 'ultra-sun-ultra-moon': 7,
+                'sword-shield': 8, 'brilliant-diamond-shining-pearl': 8, 'legends-arceus': 8,
+                'scarlet-violet': 9
+            };
+
+
+
+
 let isPokemonShiny = false;
 const shinyButton = document.getElementById("shinyButton");
 
@@ -446,8 +462,14 @@ async function showMoveList(pokemonName) {
             const moveName = moveEntry.move.name;
             const formatMoveName = moveName.charAt(0).toUpperCase() + moveName.slice(1).replace(/-/g, ' ');
 
-            // latest pokemon generation/game
-            const version = moveEntry.version_group_details[moveEntry.version_group_details.length - 1];
+            const version = moveEntry.version_group_details.find(version => {
+                return genMap[version.version_group.name] === generation;
+            });
+
+            if (!version) {
+                return;
+            }
+
             const learnMethod = version.move_learn_method.name;
             let levelLearned = version.level_learned_at;
             
@@ -489,7 +511,7 @@ async function showMoveList(pokemonName) {
         if (movesByMethod['level-up'].length > 0) {
             moveListText += 'Level-Up Moves: ';
             moveListText += movesByMethod['level-up'].map(move =>
-                move.level > 0 ? `${move.name} (Lv.${move.level})` : `${move.name} (Start)`
+                move.level > 0 ? `${move.name} (Lv.${move.level})` : `${move.name}`
             ).join(', ');
             moveListText += '\n\n';
         }   
@@ -524,7 +546,7 @@ async function showMoveList(pokemonName) {
         }
         else {
             for (let i = 0; i < moveListElements.length; i++) {
-                moveListElements[i].textContent = 'Move List: none';
+                moveListElements[i].textContent = 'Move List: Pokemon not found in this generation';
             }
         }
 

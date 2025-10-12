@@ -70,11 +70,18 @@ p {
     height: 75px;
     border-radius: 15px;
     text-align: center;
+    font-family: "VT323", monospace;
+    font-style: normal;
+    font-weight: 400;
+    color: black;
 }
 
 
 
 #pokemonInfoDisplay {
+    font-family: "VT323", monospace;
+    font-style: normal;
+    font-weight: 400;
     background-color: lightblue;
     color: black;
     width: 300px;
@@ -217,9 +224,17 @@ p {
     background-color: lightblue;
     position: absolute;
     display: flex;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-direction: column;
+    overflow: auto;
     border: 3px solid black;
     left: 115px;
     margin-top: -200px;
+    font-family: "VT323", monospace;
+    font-style: normal;
+    font-weight: 400;
+    padding: 10px;
 }
 
 

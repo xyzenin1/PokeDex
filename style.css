@@ -109,29 +109,42 @@ p {
     flex: 1;
 }
 
-#movesetButton {
+
+#buttonContainer {
+    display: flex;
+    gap: 25px;
+    margin-left: 120px;
+    margin-top: -20px;
+    margin-bottom: 10px;
+}
+
+#movesetButton, #detailButton {
     width: 80px;
     height: 15px;
     border-radius: 50px;
-    position: absolute;
-    margin-left: 120px;
-    background-color: red;
-    bottom: 50px;
+    position: relative; 
 }
+
+#movesetButton {
+    background-color: red;
+}
+
+#detailButton {
+    background-color: blue;
+}
+
+
+
 
 #movesetButton:hover {
     background-color: darkred;
 }
 
-#detailButton {
-    width: 80px;
-    height: 15px;
-    bottom: 50px;
-    border-radius: 50px;
-    position: absolute;
-    margin-left: 225px;
-    background-color: blue;
+#detailButton:hover {
+    background-color: darkblue;
 }
+
+
 
 #pokemonSprite {
     height: 200px;

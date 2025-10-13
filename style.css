@@ -10,7 +10,7 @@ p {
 
 #container {
     display: flex;
-    margin-top: 80px;
+    margin-top: 35px;
     gap: 20px;
     margin-left: 50px;
     overflow: hidden;
@@ -57,7 +57,7 @@ p {
     margin-left: 255px;
     width: 100px;
     height: 20px;
-    margin-top: 205px;
+    margin-top: 160px;
 }
 
 #userInput {
@@ -66,7 +66,6 @@ p {
     justify-content: center;
     align-items: center;
     margin-left: 125px;
-    margin-top: 165px;
     height: 75px;
     border-radius: 15px;
     text-align: center;
@@ -117,10 +116,21 @@ p {
     position: absolute;
     margin-left: 120px;
     background-color: red;
+    bottom: 50px;
 }
 
 #movesetButton:hover {
     background-color: darkred;
+}
+
+#detailButton {
+    width: 80px;
+    height: 15px;
+    bottom: 50px;
+    border-radius: 50px;
+    position: absolute;
+    margin-left: 250px;
+    background-color: blue;
 }
 
 #pokemonSprite {
@@ -219,7 +229,7 @@ p {
 }
 
 #descriptionBox {
-    width: 320px;
+    width: 280px;
     height: 100px;
     background-color: lightblue;
     position: absolute;
@@ -229,8 +239,8 @@ p {
     flex-direction: column;
     overflow: auto;
     border: 3px solid black;
-    left: 115px;
-    margin-top: -200px;
+    left: 345px;
+    top: 500px;
     font-family: "VT323", monospace;
     font-style: normal;
     font-weight: 400;

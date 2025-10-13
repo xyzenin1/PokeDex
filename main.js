@@ -3,6 +3,7 @@ const id = document.getElementById("id");
 const pokemonInfoElements = document.getElementsByClassName('pokemonInfo');
 const description = document.getElementById("descriptionBox");
 const movesetButton = document.getElementById("movesetButton");
+const detailButton = document.getElementById("detailButton");
 const moveListElements = document.getElementsByClassName('moveListInfo');
 const generationSelect = document.getElementById('generationSelect');
 
@@ -750,6 +751,16 @@ function shinySprite() {
     isPokemonShiny = shinyButton.classList.contains('active');
 }
 
+function showPokemonInfo() {
+    for (let j = 0; j < moveListElements.length; j++) {
+        moveListElements[j].style.display = 'none';
+    }
+
+    for (let i = 0; i < pokemonInfoElements.length; i++) {
+        pokemonInfoElements[i].style.display = 'block';
+    }
+}
+
 
 
 
@@ -785,4 +796,8 @@ pokemonCryButton.addEventListener('click', () => {
 
 movesetButton.addEventListener('click', () => {
     showMoveList(name_global);
+});
+
+detailButton.addEventListener('click', () => {
+    showPokemonInfo();
 });

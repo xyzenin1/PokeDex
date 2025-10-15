@@ -13,7 +13,6 @@ p {
     margin-top: 35px;
     gap: 20px;
     margin-left: 50px;
-    overflow: hidden;
 }
 
 #top {
@@ -302,4 +301,14 @@ p {
 .lit {
     background-color: aqua;
     transition: background-color 0.3s ease;
+}
+
+
+#evolutionContainer {
+    width: 565px;
+    height: 100px;
+    background-color:black;
+    position: relative;
+    left: 650px;
+    bottom: 110px;
 }

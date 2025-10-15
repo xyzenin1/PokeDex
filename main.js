@@ -769,6 +769,7 @@ generationSelect.addEventListener('change', () => {
 
     if (name_global) {
         getPokemonData();
+        getPokemonDescription(name_global)
         for (let j = 0; j < moveListElements.length; j++) {
             moveListElements[j].style.display = 'none';
         }

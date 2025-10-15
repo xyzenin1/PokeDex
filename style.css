@@ -312,3 +312,12 @@ p {
     left: 650px;
     bottom: 110px;
 }
+
+#baseEvolutionBox, #evolution1Box, #evolution2Box {
+    width: 20px;
+    height: 10px;
+    background-color: red;
+    margin: auto;
+    border: 1px solid white;
+
+}

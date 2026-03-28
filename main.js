@@ -154,6 +154,8 @@ async function getPokemonData() {
 
             await getEvolutionChain(data.name);
 
+            await searchYoutube(data.name);
+
 
             // show evolution box
             evolutionContainer.style.display = "flex";

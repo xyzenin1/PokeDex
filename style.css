@@ -64,7 +64,7 @@ p {
     width: 200px;
     justify-content: center;
     align-items: center;
-    margin-left: 125px;
+    margin-left: 112px;
     height: 75px;
     border-radius: 15px;
     text-align: center;
@@ -381,4 +381,26 @@ p {
     font-family: "VT323", monospace;
     color: #888;
     padding: 10px;
+}
+
+
+#videoContainer {
+    position: absolute;
+    display: none;
+    justify-content: flex-start;
+    align-items: stretch;
+    flex-direction: column;
+    width: 527px;
+    height: 170px;
+    overflow: auto;
+    border: 3px solid black;
+    border-radius: 8px;
+    left: 100px;
+    top: 625px;
+}
+
+.youtubeEmbed {
+    width: 100%;
+    height: 100%;
+    border: none;
 }

@@ -1,4 +1,4 @@
-const youtubeApiKey = 'AIzaSyDKuewCRmnZvG9SlcivertZRBZR92QMZFU';
+const youtubeApiKey = 'add_your_own';
 
 async function searchYoutube(pokemonName) {
     const query = encodeURIComponent(`${pokemonName} best competitive build`);

@@ -8,6 +8,7 @@ const moveListElements = document.getElementsByClassName('moveListInfo');
 const generationSelect = document.getElementById('generationSelect');
 
 const evolutionContainer = document.getElementById('evolutionContainer');
+const videoContainer = document.getElementById('videoContainer');
 
 let minLevel = 1;
 let maxLevel = 100;
@@ -38,7 +39,9 @@ const genMap = {
 
 
 let isPokemonShiny = false;
+let isYoutubeShow = false;
 const shinyButton = document.getElementById("shinyButton");
+const youtubeButton = document.getElementById("youtubeButton");
 
 const pokemonCryButton = document.getElementById('pokemonCryButton');
 
@@ -154,8 +157,12 @@ async function getPokemonData() {
 
             await getEvolutionChain(data.name);
 
-            await searchYoutube(data.name);
-
+            if (isYoutubeShow) {
+                await searchYoutube(data.name);
+            }
+            else {
+                videoContainer.style.display = "none";
+            }
 
             // show evolution box
             evolutionContainer.style.display = "flex";
@@ -881,6 +888,11 @@ function shinySprite() {
     isPokemonShiny = shinyButton.classList.contains('active');
 }
 
+function youtubeActive() {
+    youtubeButton.classList.toggle('active');
+    isYoutubeShow = youtubeButton.classList.contains('active');
+}
+
 function showPokemonInfo() {
     for (let j = 0; j < moveListElements.length; j++) {
         moveListElements[j].style.display = 'none';
@@ -918,6 +930,11 @@ myInput.addEventListener('keydown', function(event) {
 
 shinyButton.addEventListener('click', () => {
     shinySprite();
+    getPokemonData();
+});
+
+youtubeButton.addEventListener('click', () => {
+    youtubeActive();
     getPokemonData();
 });
 

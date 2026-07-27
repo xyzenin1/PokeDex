@@ -414,7 +414,6 @@ p {
     width: 527px;
     height: 170px;
     overflow: auto;
-    border: 3px solid black;
     border-radius: 8px;
     left: 100px;
     top: 625px;
@@ -424,4 +423,22 @@ p {
     width: 100%;
     height: 100%;
     border: none;
+}
+
+#youtubeFilter {
+    position: absolute;
+    display: flex;
+    gap: 8px;
+    margin-top: 15px;
+    margin-left: 110px;
+    font-family: "VT323", monospace;
+}
+
+#checkBoxFilter {
+    position: absolute;
+    display: flex;
+    gap: 8px;
+    margin-top: 35px;
+    margin-left: 110px;
+    font-family: "VT323", monospace;
 }

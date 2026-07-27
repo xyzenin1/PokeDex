@@ -704,8 +704,6 @@ function getGeneration() {
 
 
 
-
-
 async function getMinimumLevel(pokemonName) {
     try {
         // Fetch species data
@@ -889,8 +887,23 @@ function shinySprite() {
 }
 
 function youtubeActive() {
+    const youtubeFilter = document.getElementById('youtubeFilter');
+    const checkBoxFilter = document.getElementById('checkBoxFilter');
     youtubeButton.classList.toggle('active');
     isYoutubeShow = youtubeButton.classList.contains('active');
+
+    if (isYoutubeShow) {
+        youtubeFilter.style.display = 'none';
+        checkBoxFilter.style.display = 'none';
+    }
+    else {
+        youtubeFilter.style.display = 'flex';
+        checkBoxFilter.style.display = 'flex';
+
+        document.querySelectorAll('#checkBoxFilter input[type="checkbox"]').forEach(cb => cb.checked = false);
+        document.querySelectorAll('#youtubeFilter input[type="radio"]').forEach(r => r.checked = false);
+    }
+
 }
 
 function showPokemonInfo() {
@@ -934,8 +947,16 @@ shinyButton.addEventListener('click', () => {
 });
 
 youtubeButton.addEventListener('click', () => {
+    const iframe = videoContainer.querySelector('iframe');
     youtubeActive();
-    getPokemonData();
+
+    if (videoContainer.style.display === 'none') {
+        searchYoutube(name_global);
+    } 
+    else {
+        if (iframe) iframe.src = '';
+        videoContainer.style.display = 'none';
+    }
 });
 
 pokemonCryButton.addEventListener('click', () => {
